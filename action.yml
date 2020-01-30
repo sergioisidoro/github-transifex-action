@@ -1,0 +1,15 @@
+# https://help.github.com/en/articles/metadata-syntax-for-github-actions
+
+author: 'localheinz'
+
+branding:
+  icon: 'box'
+  color: 'green'
+
+description: 'Not sure yet.'
+
+name: 'github-action-template'
+
+runs:
+  using: 'docker'
+  image: 'docker://ergebnis/github-action-template'
