@@ -1,8 +1,11 @@
-FROM php:7.4-cli-alpine
+FROM python:3.7
 
-LABEL "repository"="https://github.com/ergebnis/github-action-template"
-LABEL "homepage"="https://github.com/ergebnis/github-action-template"
-LABEL "maintainer"="Andreas Möller <am@localheinz.com>"
+LABEL "repository"="https://github.com/sergioisidoro/github-transifex-action"
+LABEL "homepage"="https://github.com/sergioisidoro/github-transifex-action"
+LABEL "maintainer"="Sergio Isidoro <smaisidoro@gmail.com>"
+
+
+RUN pip install transifex-client
 
 ADD entrypoint.sh /entrypoint.sh
 

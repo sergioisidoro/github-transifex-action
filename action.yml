@@ -1,15 +1,15 @@
 # https://help.github.com/en/articles/metadata-syntax-for-github-actions
 
-author: 'localheinz'
+author: 'sergioisidoro'
 
 branding:
   icon: 'box'
   color: 'green'
 
-description: 'Not sure yet.'
+description: 'Push your strings automatically to Transifex when PR is ready for translations'
 
-name: 'github-action-template'
+name: 'github-transifex-actions'
 
 runs:
   using: 'docker'
-  image: 'docker://ergebnis/github-action-template'
+  image: 'docker://sergioisidoro/github-transifex-action'

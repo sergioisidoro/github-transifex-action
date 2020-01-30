@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DOCKER_IMAGE: ergebnis/github-action-template
+      DOCKER_IMAGE: sergioisidoro/github-transifex-action
 
     steps:
       - name: "Checkout"

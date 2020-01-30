@@ -1,6 +1,6 @@
 .PHONY: docker help it
 
-DOCKER_IMAGE:=ergebnis/github-action-template
+DOCKER_IMAGE:=sergioisidoro/github-transifex-action
 
 it: docker ## Runs the docker target
 
