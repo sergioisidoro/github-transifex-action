@@ -16,17 +16,14 @@ Define a workflow in `.github/workflows/continuous-integration.yml` (or add a jo
 ```yaml
 on:
   pull_request:
-  push:
-    branches:
-      - master
-    tags:
-      - "**"
+    types: [labeled]
 
-name: "Continuous Integration"
+name: "Translations Sync"
 
 jobs:
-  github-action-template:
-    name: github-action-template
+  push-strings-to-transifex:
+    if: contains(github.event.pull_request.labels.*.name, 'Ready for Translations')
+    name: push-strings-to-transifex
 
     runs-on: ubuntu-latest
 
@@ -35,7 +32,9 @@ jobs:
         uses: actions/checkout@master
 
       - name: "Run action"
-        uses: docker://ergebnis/github-action-template:latest
+        env: # Or as an environment variable
+            TX_CONFIG: ${{ secrets.TX_CONFIG }}
+        uses: docker://sergioisidoro/github-transifex-action:latest
 ```
 
 ### Docker image
@@ -45,7 +44,7 @@ As Docker images are automatically built and pushed on a merge to `master` or wh
 :bulb: The Docker image can also be executed directly by running
 
 ```
-$ docker run --interactive --rm --tty --workdir=/app --volume ${PWD}:/app ergebnis/github-action-template:latest
+$ docker run --interactive --rm --tty --workdir=/app --volume ${PWD}:/app sergioisidoro/github-transifex-action:latest
 ```
 
 For more information, see the [Docker Docs: Docker run reference](https://docs.docker.com/engine/reference/run/).
@@ -74,8 +73,8 @@ Instead of using the latest pre-built Docker image, you can also specify a Docke
          uses: actions/checkout@master
 
        - name: "Run action"
--        uses: docker://ergebnis/github-action-template:latest
-+        uses: docker://ergebnis/github-action-template:1.2.3
+-        uses: docker://sergioisidoro/github-transifex-action:latest
++        uses: docker://sergioisidoro/github-transifex-action:1.2.3
 ```
 
 ## Changelog
