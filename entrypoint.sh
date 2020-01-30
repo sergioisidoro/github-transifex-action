@@ -1,4 +1,4 @@
 #!/bin/sh -l
 
-sh -c "PUSHING ALL SOURCES"
-tx push -s
+tx init --no-interactive
+tx push -s 
