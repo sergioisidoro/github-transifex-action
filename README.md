@@ -33,7 +33,7 @@ jobs:
 
       - name: "Run action"
         env: # Or as an environment variable
-            TX_CONFIG: ${{ secrets.TX_CONFIG }}
+            TX_TOKEN: ${{ secrets.TX_TOKEN }}
         uses: docker://sergioisidoro/github-transifex-action:latest
 ```
 
