@@ -22,7 +22,7 @@ name: "Translations Sync"
 
 jobs:
   push-strings-to-transifex:
-    if: contains(github.event.pull_request.labels.*.name, 'Ready for Translations')
+    if: github.event.label.name == 'Ready for translations'
     name: push-strings-to-transifex
 
     runs-on: ubuntu-latest
