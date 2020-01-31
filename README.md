@@ -1,15 +1,12 @@
-# github-action-template
-
-[![Continuous Integration](https://github.com/ergebnis/github-action-template/workflows/Continuous%20Integration/badge.svg)](https://github.com/ergebnis/github-action-template/actions)
-[![Continuous Deployment](https://github.com/ergebnis/github-action-template/workflows/Continuous%20Deployment/badge.svg)](https://github.com/ergebnis/github-action-template/actions)
+# github-transifex-action
 
 ## What does this action do?
 
-:bulb: This is a great place for showing what this action does.
+- For now it just pushes the source strings to Transifex, as long as you configure the `TX_TOKEN` to the enviroment of the job.
 
 ## Usage
 
-Define a workflow in `.github/workflows/continuous-integration.yml` (or add a job if you already have defined workflows).
+Define a workflow in `.github/workflows/transifex.yml` (or add a job if you already have defined workflows).
 
 :bulb: Read more about [Configuring a workflow](https://help.github.com/en/articles/configuring-a-workflow).
 
