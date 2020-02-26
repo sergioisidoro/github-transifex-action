@@ -37,6 +37,22 @@ jobs:
         uses: docker://sergioisidoro/github-transifex-action:latest
 ```
 
+
+## What commands are supported?
+
+**The default action is push sources**. But you can set different actions through env variables.
+For example, just define these variables in ENV. If you don't want to push sources, you need to set the
+variable to false, because it is defined in the defaults
+```
+      - name: "Run action"
+        env: # Or as an environment variable
+            TX_TOKEN: ${{ secrets.TX_TOKEN }}
+            PUSH_SOURCES: "True"
+            PUSH_TRANSLATIONS: "True"
+            PULL_SOURCES: "False"
+            PULL_TRANSLATIONS: "True"
+```
+
 ### Docker image
 
 As Docker images are automatically built and pushed on a merge to `master` or when a new tag is created in this repository, the recommended way to use this GitHub action is to reference the pre-built Docker image directly, as seen above.
@@ -82,6 +98,10 @@ Instead of using the latest pre-built Docker image, you can also specify a Docke
 Please have a look at [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Contributing
+
+
+### TODO:
+- Passing the resource as an argument
 
 Please have a look at [`CONTRIBUTING.md`](.github/CONTRIBUTING.md).
 
