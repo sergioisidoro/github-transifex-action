@@ -19,5 +19,5 @@ fi
 
 if $PULL_TRANSLATIONS; then
     echo "PULLING TRANSLATIONS"
-    tx pull -t
+    tx pull -a
 fi
