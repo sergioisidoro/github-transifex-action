@@ -14,8 +14,8 @@ runs:
   using: 'docker'
   image: 'docker://sergioisidoro/github-transifex-action'
   env:
-    PUSH_SOURCES: "True"
-    PUSH_TRANSLATIONS: "False"
-    PULL_SOURCES: "False"
-    PULL_TRANSLATIONS: "False"
+    PUSH_SOURCES: "true"
+    PUSH_TRANSLATIONS: "false"
+    PULL_SOURCES: "false"
+    PULL_TRANSLATIONS: "false"
 

@@ -44,10 +44,10 @@ variable to false, because it is defined in the defaults
       - name: "Run action"
         env: # Or as an environment variable
             TX_TOKEN: ${{ secrets.TX_TOKEN }}
-            PUSH_SOURCES: "True"
-            PUSH_TRANSLATIONS: "True"
-            PULL_SOURCES: "False"
-            PULL_TRANSLATIONS: "True"
+            PUSH_SOURCES: "true"
+            PUSH_TRANSLATIONS: "true"
+            PULL_SOURCES: "false"
+            PULL_TRANSLATIONS: "true"
 ```
 
 ### Docker image
