@@ -48,7 +48,7 @@ variable to false, because it is defined in the defaults
             PUSH_TRANSLATIONS: "true"
             PULL_SOURCES: "false"
             PULL_TRANSLATIONS: "true"
-            MINIMUM_PERC: "0"
+            MINIMUM_PERC: '0'
             DISABLE_OVERRIDE: "false"
 ```
 
