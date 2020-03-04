@@ -4,6 +4,8 @@
 /.editorconfig
 /.gitattributes
 /.gitignore
+/.tx/
+/test_locales/
 /CHANGELOG.md
 /LICENSE
 /Makefile

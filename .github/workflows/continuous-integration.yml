@@ -13,6 +13,7 @@ jobs:
 
     env:
       DOCKER_IMAGE: sergioisidoro/github-transifex-action
+      TX_TOKEN: ${{ secrets.TX_TOKEN }}
 
     steps:
       - name: "Checkout"
@@ -22,4 +23,9 @@ jobs:
         run: $(which docker) build --tag ${DOCKER_IMAGE}:latest .
 
       - name: "Run Docker image"
-        run: $(which docker) run --interactive --rm --workdir=/app --volume ${GITHUB_WORKSPACE}:/app ${DOCKER_IMAGE}:latest
+        run: $(which docker) run
+          --interactive --rm
+          --env-file docker-test.env --env TX_TOKEN=$TX_TOKEN
+          --workdir=/app
+          --volume ${GITHUB_WORKSPACE}:/app
+          ${DOCKER_IMAGE}:latest
