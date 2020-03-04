@@ -19,8 +19,15 @@ fi
 
 if [ "$PULL_TRANSLATIONS" = true ] ; then
     args=()
-    (( MINIMUM_PERC != 0 )) && args+=( "--minimum-perc=$MINIMUM_PERC" )
-    (( DISABLE_OVERRIDE = true )) && args+=( "--disable-overwrite" )
+
+    if [ "$MINIMUM_PERC" != 0 ] ; then
+        args+=( "--minimum-perc=$MINIMUM_PERC" )
+    fi
+
+    if [ "$DISABLE_OVERRIDE" = true ] ; then
+        args+=( "--disable-overwrite" )
+    fi
+
     echo "PULLING TRANSLATIONS (with args: $args)"
     tx pull -a "${args[@]}"
 fi
