@@ -2,29 +2,29 @@
 
 echo $config > ~/.transifexrc
 
-if [ "$PUSH_SOURCES" = true ] ; then
+if [ $PUSH_SOURCES ] ; then
     echo "PUSHING SOURCES"
     tx push -s
 fi
 
-if [ "$PUSH_TRANSLATIONS" = true ] ; then
+if [ $PUSH_TRANSLATIONS ] ; then
     echo "PUSHING TRANSLATIONS"
     tx push -t
 fi
 
-if [ "$PULL_SOURCES" = true ] ; then
+if [ $PULL_SOURCES ] ; then
     echo "PULLING SOURCES"
     tx pull -s
 fi
 
-if [ "$PULL_TRANSLATIONS" = true ] ; then
+if [ $PULL_TRANSLATIONS ] ; then
     args=()
 
-    if [ "$MINIMUM_PERC" != 0 ] ; then
+    if [ $MINIMUM_PERC -ne 0 ] ; then
         args+=( "--minimum-perc=$MINIMUM_PERC" )
     fi
 
-    if [ "$DISABLE_OVERRIDE" = true ] ; then
+    if [ $DISABLE_OVERRIDE ] ; then
         args+=( "--disable-overwrite" )
     fi
 
