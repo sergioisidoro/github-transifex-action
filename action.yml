@@ -18,4 +18,5 @@ runs:
     PUSH_TRANSLATIONS: "false"
     PULL_SOURCES: "false"
     PULL_TRANSLATIONS: "false"
-
+    MINIMUM_PERC: "0"
+    DISABLE_OVERRIDE: "false"
