@@ -29,3 +29,14 @@ jobs:
           --workdir=/app
           --volume ${GITHUB_WORKSPACE}:/app
           ${DOCKER_IMAGE}:latest
+
+      - name: "Run Docker image"
+        run: $(which docker) run
+          --interactive --rm
+          --env-file git-flow-docker-test.env
+          --env TX_TOKEN=$TX_TOKEN
+          --env INPUT_CURRENT_BRANCH=$GITHUB_HEAD_REF
+          --env INPUT_SKIP_PUSH_COMMIT=true
+          --workdir=/app
+          --volume ${GITHUB_WORKSPACE}:/app
+          ${DOCKER_IMAGE}:latest
