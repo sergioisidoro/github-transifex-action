@@ -29,7 +29,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: "Run action"
-        env: # Or as an environment variable
+        with:
             TX_TOKEN: ${{ secrets.TX_TOKEN }}
         uses: docker://sergioisidoro/github-transifex-action:latest
 ```
@@ -37,20 +37,43 @@ jobs:
 
 ## What commands are supported?
 
+### Simple workflow ( ⚠️ replaces whatever is in Tx / locally with whatever is being pushed / pulled)
 **The default action is push sources**. But you can set different actions through env variables.
 For example, just define these variables in ENV. If you don't want to push sources, you need to set the
 variable to false, because it is defined in the defaults
 ```
       - name: "Run action"
-        env: # Or as an environment variable
-            TX_TOKEN: ${{ secrets.TX_TOKEN }}
-            PUSH_SOURCES: "true"
-            PUSH_TRANSLATIONS: "true"
-            PULL_SOURCES: "false"
-            PULL_TRANSLATIONS: "true"
-            MINIMUM_PERC: '0'
-            DISABLE_OVERRIDE: "false"
+        with: # Or as an environment variable
+            tx_token: ${{ secrets.TX_TOKEN }}
+            push_sources: true
+            push_translations: true
+            pull_sources: false
+            pull_translations: true
+            minimum_perc: 0
+            disable_override: false
 ```
+
+### Git workflow
+Because you might have multiple branches ongoing, and you might not want to override what the other branch has
+pushed to transifex, Git workflow offers a solution for handling the diff of transifex remote and the current branch with git.
+
+It will take whatever is in transifex remote into a separate branch, merge your current branch into that
+branch (and resolving the diff), and then pushing things back to transifex. That way you have what's in transifex +
+all the changes you've made in the current branch. Of course if there are merge conflicts you will need to take manual action.
+```
+      - name: "Run action"
+        with: # Or as an environment variable
+            tx_token: ${{ secrets.TX_TOKEN }}
+            git_flow: true
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            translations_folder: config/locale
+            push_translations: true
+            push_sources: true
+            ...
+            minimum_perc: 0
+            disable_override: false
+```
+NOTE: `github_token` and `translations_folder` are required if you use `git_flow`
 
 ### Docker image
 
