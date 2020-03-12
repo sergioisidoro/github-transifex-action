@@ -67,3 +67,7 @@ inputs:
   skip_push_commit:
     description: 'Does not push anything back to git remote'
     required: false
+  parallel:
+    description: 'Pushes or pulls things from transifex in parallel'
+    required: false
+    default: 'false'
