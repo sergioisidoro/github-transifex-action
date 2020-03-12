@@ -62,7 +62,7 @@ if [[ $INPUT_GIT_FLOW ]]; then
 
     # Merges the current branch to the most up to date translations
     git add "${TRANSLATIONS_FOLDER}"
-    git diff --staged --quiet || git commit -m "Update translations" && git merge --ff --no-edit $REMOTE/$CURRENT_BRANCH
+    git diff --staged --quiet || git commit -m "Update translations" && git merge --ff --no-edit $CURRENT_BRANCH
 
     # and let's push the merged version upstream
 
