@@ -13,10 +13,57 @@ name: 'github-transifex-actions'
 runs:
   using: 'docker'
   image: 'docker://sergioisidoro/github-transifex-action'
-  env:
-    PUSH_SOURCES: "true"
-    PUSH_TRANSLATIONS: "false"
-    PULL_SOURCES: "false"
-    PULL_TRANSLATIONS: "false"
-    MINIMUM_PERC: '0'
-    DISABLE_OVERRIDE: "false"
+
+inputs:
+  push_sources:
+    description: 'Pushes source locales to Transifex'
+    required: false
+    default: 'true'
+  push_translations:
+    description: 'Pushes Translations to Transifex'
+    default: 'false'
+    required: false
+  pull_sources:
+    description: 'Pulls source locales to Transifex'
+    required: false
+    default: 'true'
+  pull_translations:
+    description: 'Pulls Translations to Transifex'
+    default: 'false'
+    required: false
+  minimum_perc:
+    description: 'Minimum percentage the files need to be translated to be fetched'
+    default: '0'
+    required: false
+  disable_override:
+    description: 'If true it will not override the files locally (WARN: Has issues with git)'
+    default: 'false'
+    required: false
+  git_flow:
+    description: 'Should use Git flow?'
+    default: 'false'
+    required: false
+  current_branch:
+    description: 'The current branch that is under work. Defaults to GITHUB_HEAD_REF'
+    required: false
+  master_branch:
+    description: 'The branch that is used as master. Defaults to master'
+    default: 'master'
+    required: false
+  github_token:
+    description: 'Github required for git flow'
+    required: false
+  translations_folder:
+    description: 'The wildcard-able expression for the folder containing the locales. Eg /config/locales'
+    required: false
+  committer_email:
+    description: 'The email of the author of commit'
+    default: 'git-action@transifex.com'
+    required: false
+  committer_name:
+    default: 'Transifex Github action'
+    description: 'The email of the author of commit'
+    required: false
+  skip_push_commit:
+    description: 'Does not push anything back to git remote'
+    required: false

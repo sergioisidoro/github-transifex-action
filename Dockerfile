@@ -6,6 +6,7 @@ LABEL "maintainer"="Sergio Isidoro <smaisidoro@gmail.com>"
 
 
 RUN pip install transifex-client
+RUN apt-get install git
 
 ADD entrypoint.sh /entrypoint.sh
 
