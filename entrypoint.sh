@@ -10,8 +10,7 @@ MASTER_BRANCH=${INPUT_MASTER_BRANCH:-master}
 REMOTE=${INPUT_REMOTE:-origin}
 TRANSLATIONS_FOLDER=${INPUT_TRANSLATIONS_FOLDER}
 SKIP_PUSH_COMMIT=${INPUT_SKIP_PUSH_COMMIT}
-
-echo $config > ~/.transifexrc
+TX_TOKEN=${INPUT_TX_TOKEN:-$TX_TOKEN}
 
 # Because transifex overrides whatever is in remote with what's currently in
 # our branch, we will do the following:
