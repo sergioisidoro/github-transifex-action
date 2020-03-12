@@ -54,6 +54,7 @@ if [[ $INPUT_GIT_FLOW ]]; then
     remote_repo="https://${GITHUB_ACTOR}:${INPUT_GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
     git fetch --all
 
+    git checkout ${CURRENT_BRANCH}
     git checkout ${MASTER_BRANCH}
     TRANSLATIONS_MERGE_BRANCH="${MASTER_BRANCH}-translations-$(date +%s)"
     git checkout -b ${TRANSLATIONS_MERGE_BRANCH}
