@@ -54,7 +54,11 @@ if [[ $INPUT_GIT_FLOW ]] ; then
     git config --global user.email "${COMMITTER_EMAIL}"
     git config --global user.name "${COMMITTER_NAME}"
     remote_repo="https://${GITHUB_ACTOR}:${INPUT_GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-    git fetch --all
+
+    # Git checkout action does a shallow clone. That prevents us to
+    # access common history of branches.
+    # This assumes that master will be reachable within 1000 commits
+    git fetch --all --depth=1000
 
     git checkout ${CURRENT_BRANCH}
     git pull
