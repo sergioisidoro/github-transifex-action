@@ -2,7 +2,9 @@
 
 # exit when any command fails
 set -e
-set -x
+if [[ $INPUT_DEBUG ]] ; then
+    set -x
+fi
 echo "STARTING TRANSIFEX ACTION..."
 
 CURRENT_BRANCH=${INPUT_CURRENT_BRANCH:-$GITHUB_HEAD_REF}
@@ -40,7 +42,7 @@ if [[ $INPUT_DISABLE_OVERRIDE ]] ; then
 fi
 
 
-if [[ $INPUT_GIT_FLOW ]]; then
+if [[ $INPUT_GIT_FLOW ]] ; then
     echo "USING GIT MERGE FLOW"
 
     [[ -z "${INPUT_GITHUB_TOKEN}" ]] && {
@@ -65,6 +67,11 @@ if [[ $INPUT_GIT_FLOW ]]; then
 
     # Merges the current branch to the most up to date translations
     git add "${TRANSLATIONS_FOLDER}"
+
+    if [[ $INPUT_DEBUG ]] ; then
+        git log --all --graph --decorate --oneline -n 100
+    fi
+
     git diff --staged --quiet || git commit -m "Update translations" && git merge --ff --no-edit $CURRENT_BRANCH
 
     # and let's push the merged version upstream
