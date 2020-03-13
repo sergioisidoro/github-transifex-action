@@ -57,8 +57,7 @@ if [[ $INPUT_GIT_FLOW ]] ; then
 
     # Git checkout action does a shallow clone. That prevents us to
     # access common history of branches.
-    # This assumes that master will be reachable within 1000 commits
-    git fetch --all --depth=1000
+    git fetch --unshallow
 
     git checkout ${CURRENT_BRANCH}
     git pull
