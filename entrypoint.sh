@@ -55,7 +55,9 @@ if [[ $INPUT_GIT_FLOW ]]; then
     git fetch --all
 
     git checkout ${CURRENT_BRANCH}
+    git pull
     git checkout ${MASTER_BRANCH}
+    git pull
     TRANSLATIONS_MERGE_BRANCH="${MASTER_BRANCH}-translations-$(date +%s)"
     git checkout -b ${TRANSLATIONS_MERGE_BRANCH}
     echo "Pulling most up to date sources"
