@@ -75,7 +75,8 @@ if [[ $INPUT_GIT_FLOW ]] ; then
         git log --all --graph --decorate --oneline -n 100
     fi
 
-    git diff --staged --quiet || git commit -m "Update translations" && git merge --ff --no-edit $CURRENT_BRANCH
+     # Stashes all of the non needed changes (eg. sometines .tx/config is changed)
+    git diff --staged --quiet || git commit -m "Update translations" && git stash && git merge --ff --no-edit $CURRENT_BRANCH
 
     # and let's push the merged version upstream
 
