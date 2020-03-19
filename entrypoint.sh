@@ -59,27 +59,22 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
     # access common history of branches.
     git fetch --unshallow
 
-    git checkout ${CURRENT_BRANCH}
-    git pull
     git checkout ${MASTER_BRANCH}
-    git pull
     TRANSLATIONS_MERGE_BRANCH="${MASTER_BRANCH}-translations-$(date +%s)"
     git checkout -b ${TRANSLATIONS_MERGE_BRANCH}
-    echo "Pulling most up to date sources"
-    tx pull -a --no-interactive "${common_args[@]}"
+    
+    echo "Pulling most up to date sources and translations"
+    tx pull -a -s --no-interactive "${common_args[@]}"
 
-    # Merges the current branch to the most up to date translations
+    # Commits latest transifex tranlsations to our local branch
     git add "${TRANSLATIONS_FOLDER}"
+    
+    git diff --staged
 
-    if [[ "$INPUT_DEBUG" = true ]] ; then
-        git log --all --graph --decorate --oneline -n 100
-    fi
-
-     # Stashes all of the non needed changes (eg. sometines .tx/config is changed)
-    git diff --staged --quiet || git commit -m "Update translations" && git stash && git merge --ff --no-edit $CURRENT_BRANCH
+    # Stashes all of the non needed changes (eg. sometines .tx/config is changed)
+    git diff --staged --quiet || git commit -m "Update translations" && git stash && git merge --no-edit $CURRENT_BRANCH
 
     # and let's push the merged version upstream
-
     if [[ "$INPUT_PUSH_SOURCES" = true ]] && [[ "$INPUT_PUSH_TRANSLATIONS" = true ]] ; then
         tx push -s -t --no-interactive "${common_args[@]}"
     else
@@ -90,14 +85,6 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
         if [[ "$INPUT_PUSH_TRANSLATIONS" = true ]] ; then
             tx push -t --no-interactive "${common_args[@]}"
         fi
-    fi
-
-    if [[ "$INPUT_PULL_SOURCES" = true ]] ; then
-        tx pull -s --no-interactive "${args[@]}" "${common_args[@]}"
-    fi
-
-    if [[ "$INPUT_PULL_TRANSLATIONS" = true ]] ; then
-        tx pull -a --no-interactive "${args[@]}" "${common_args[@]}"
     fi
 
     if [[ "$INPUT_PULL_SOURCES" = true ]] || [[ "$INPUT_PULL_TRANSLATIONS" = true ]] ; then
