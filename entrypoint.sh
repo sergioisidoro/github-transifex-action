@@ -80,7 +80,7 @@ if [[ $INPUT_GIT_FLOW ]] ; then
 
     # and let's push the merged version upstream
 
-    if [[ $INPUT_PUSH_SOURCES ]] && [[ $INPUT_PUSH_TRANSLATIONS ]] ; then
+    if [[ $INPUT_PUSH_SOURCES && $INPUT_PUSH_TRANSLATIONS ]] ; then
         tx push -s -t --no-interactive "${common_args[@]}"
     else
         if [[ $INPUT_PUSH_SOURCES ]] ; then
@@ -100,7 +100,7 @@ if [[ $INPUT_GIT_FLOW ]] ; then
         tx pull -a --no-interactive "${args[@]}" "${common_args[@]}"
     fi
 
-    if [[ $INPUT_PULL_SOURCES ]] || [[ $INPUT_PULL_TRANSLATIONS ]] ; then
+    if [[ $INPUT_PULL_SOURCES || $INPUT_PULL_TRANSLATIONS ]] ; then
         # Stashes all of the non needed changes (eg. sometines .tx/config is changed)
         git stash
         git checkout $CURRENT_BRANCH
