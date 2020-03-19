@@ -6,3 +6,10 @@ file_filter = test_locales/<lang>.yml
 source_file = test_locales/en.yml
 source_lang = en
 type = YML
+
+
+[github-actions-test.another_test_locales]
+file_filter = another_test_locales/<lang>.yml
+source_file = another_test_locales/en.yml
+source_lang = en
+type = YML

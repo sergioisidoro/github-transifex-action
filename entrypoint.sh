@@ -62,7 +62,7 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
     git checkout ${MASTER_BRANCH}
     TRANSLATIONS_MERGE_BRANCH="${MASTER_BRANCH}-translations-$(date +%s)"
     git checkout -b ${TRANSLATIONS_MERGE_BRANCH}
-    
+
     echo "Pulling most up to date sources and translations"
     # Unfortunately we need to use force because transifex thinks the checked out
     # files are newer than in Transifex, so they get ignored. See issue:
@@ -70,8 +70,8 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
     tx pull -a -s --no-interactive --force "${common_args[@]}" "${args[@]}"
 
     # Commits latest transifex tranlsations to our local branch
-    git add "${TRANSLATIONS_FOLDER}"
-    
+    git add $(echo ${TRANSLATIONS_FOLDER})
+
     git diff --staged
 
     # Stashes all of the non needed changes (eg. sometines .tx/config is changed)
@@ -95,7 +95,7 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
         git stash
         git checkout $CURRENT_BRANCH
         git checkout ${TRANSLATIONS_MERGE_BRANCH} -- $TRANSLATIONS_FOLDER
-        git add "${TRANSLATIONS_FOLDER}"
+        git add $(echo $TRANSLATIONS_FOLDER)
         git diff --staged --quiet || git commit -m "Update translations from Transifex"
 
         if [[ "$SKIP_PUSH_COMMIT" = true ]] ; then
