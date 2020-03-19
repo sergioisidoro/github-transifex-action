@@ -81,7 +81,7 @@ if [[ $INPUT_GIT_FLOW ]] ; then
     # and let's push the merged version upstream
 
     if [[ $INPUT_PUSH_SOURCES ]] && [[ $INPUT_PUSH_TRANSLATIONS ]] ; then
-        tx push -s --no-interactive "${common_args[@]}"
+        tx push -s -t --no-interactive "${common_args[@]}"
     else
         if [[ $INPUT_PUSH_SOURCES ]] ; then
             tx push -s --no-interactive "${common_args[@]}"
