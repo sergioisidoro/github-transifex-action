@@ -29,7 +29,7 @@ export TX_TOKEN=${INPUT_TX_TOKEN:-$TX_TOKEN}
 args=()
 common_args=()
 
-if [[ $INPUT_PARALLEL ]] ; then
+if [[ "$INPUT_PARALLEL" = true ]] ; then
     common_args+=( "--parallel" )
 fi
 
@@ -37,12 +37,12 @@ if [[ $INPUT_MINIMUM_PERC -ne 0 ]] ; then
     args+=( "--minimum-perc=$INPUT_MINIMUM_PERC" )
 fi
 
-if [[ $INPUT_DISABLE_OVERRIDE ]] ; then
+if [[ "$INPUT_DISABLE_OVERRIDE" = true ]] ; then
     args+=( "--disable-overwrite" )
 fi
 
 
-if [[ $INPUT_GIT_FLOW ]] ; then
+if [[ "$INPUT_GIT_FLOW" = true ]] ; then
     echo "USING GIT MERGE FLOW"
 
     [[ -z "${INPUT_GITHUB_TOKEN}" ]] && {
@@ -71,7 +71,7 @@ if [[ $INPUT_GIT_FLOW ]] ; then
     # Merges the current branch to the most up to date translations
     git add "${TRANSLATIONS_FOLDER}"
 
-    if [[ $INPUT_DEBUG ]] ; then
+    if [[ "$INPUT_DEBUG" = true ]] ; then
         git log --all --graph --decorate --oneline -n 100
     fi
 
@@ -80,27 +80,27 @@ if [[ $INPUT_GIT_FLOW ]] ; then
 
     # and let's push the merged version upstream
 
-    if [[ $INPUT_PUSH_SOURCES && $INPUT_PUSH_TRANSLATIONS ]] ; then
+    if [[ "$INPUT_PUSH_SOURCES" = true ]] && [[ "$INPUT_PUSH_TRANSLATIONS" = true ]] ; then
         tx push -s -t --no-interactive "${common_args[@]}"
     else
-        if [[ $INPUT_PUSH_SOURCES ]] ; then
+        if [[ "$INPUT_PUSH_SOURCES" = true ]] ; then
             tx push -s --no-interactive "${common_args[@]}"
         fi
 
-        if [[ $INPUT_PUSH_TRANSLATIONS ]] ; then
+        if [[ "$INPUT_PUSH_TRANSLATIONS" = true ]] ; then
             tx push -t --no-interactive "${common_args[@]}"
         fi
     fi
 
-    if [[ $INPUT_PULL_SOURCES ]] ; then
+    if [[ "$INPUT_PULL_SOURCES" = true ]] ; then
         tx pull -s --no-interactive "${args[@]}" "${common_args[@]}"
     fi
 
-    if [[ $INPUT_PULL_TRANSLATIONS ]] ; then
+    if [[ "$INPUT_PULL_TRANSLATIONS" = true ]] ; then
         tx pull -a --no-interactive "${args[@]}" "${common_args[@]}"
     fi
 
-    if [[ $INPUT_PULL_SOURCES || $INPUT_PULL_TRANSLATIONS ]] ; then
+    if [[ "$INPUT_PULL_SOURCES" = true ] || [ "$INPUT_PULL_TRANSLATIONS" = true ]] ; then
         # Stashes all of the non needed changes (eg. sometines .tx/config is changed)
         git stash
         git checkout $CURRENT_BRANCH
@@ -108,7 +108,7 @@ if [[ $INPUT_GIT_FLOW ]] ; then
         git add "${TRANSLATIONS_FOLDER}"
         git diff --staged --quiet || git commit -m "Update translations from Transifex"
 
-        if [[ $SKIP_PUSH_COMMIT ]] ; then
+        if [[ "$SKIP_PUSH_COMMIT" = true ]] ; then
             echo "SKIPPING PUSH!"
         else
             git push "${remote_repo}" HEAD:${CURRENT_BRANCH}
@@ -116,22 +116,22 @@ if [[ $INPUT_GIT_FLOW ]] ; then
     fi
 else
     echo "USING OVERRIDE FLOW"
-    if [[ $INPUT_PULL_SOURCES ]] ; then
+    if [[ "$INPUT_PULL_SOURCES" = true ]] ; then
         echo "PULLING SOURCES"
         tx pull -s --no-interactive "${common_args[@]}"
     fi
 
-    if [[ $INPUT_PULL_TRANSLATIONS ]] ; then
+    if [[ "$INPUT_PULL_TRANSLATIONS" = true ]] ; then
         echo "PULLING TRANSLATIONS (with args: $args)"
         tx pull -a --no-interactive "${args[@]}" "${common_args[@]}"
     fi
 
-    if [[ $INPUT_PUSH_SOURCES ]] ; then
+    if [[ "$INPUT_PUSH_SOURCES" = true ]] ; then
         echo "PUSHING SOURCES"
         tx push -s --no-interactive "${common_args[@]}"
     fi
 
-    if [[ $INPUT_PUSH_TRANSLATIONS ]] ; then
+    if [[ "$INPUT_PUSH_TRANSLATIONS" = true ]] ; then
         echo "PUSHING TRANSLATIONS"
         tx push -t --no-interactive "${common_args[@]}"
     fi
