@@ -108,12 +108,12 @@ else
     echo "USING OVERRIDE FLOW"
     if [[ "$INPUT_PULL_SOURCES" = true ]] ; then
         echo "PULLING SOURCES"
-        tx pull -s --no-interactive "${common_args[@]}"
+        tx pull -s --force --no-interactive "${common_args[@]}"
     fi
 
     if [[ "$INPUT_PULL_TRANSLATIONS" = true ]] ; then
         echo "PULLING TRANSLATIONS (with args: $args)"
-        tx pull -a --no-interactive "${args[@]}" "${common_args[@]}"
+        tx pull -a --force --no-interactive "${args[@]}" "${common_args[@]}"
     fi
 
     if [[ "$INPUT_PUSH_SOURCES" = true ]] ; then
