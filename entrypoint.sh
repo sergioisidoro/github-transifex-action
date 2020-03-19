@@ -64,7 +64,10 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
     git checkout -b ${TRANSLATIONS_MERGE_BRANCH}
     
     echo "Pulling most up to date sources and translations"
-    tx pull -a -s --no-interactive "${common_args[@]}"
+    # Unfortunately we need to use force because transifex thinks the checked out
+    # files are newer than in Transifex, so they get ignored. See issue:
+    # https://github.com/transifex/transifex-client/issues/22
+    tx pull -a -s --no-interactive --force "${common_args[@]}"
 
     # Commits latest transifex tranlsations to our local branch
     git add "${TRANSLATIONS_FOLDER}"
