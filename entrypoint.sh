@@ -100,7 +100,7 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
         tx pull -a --no-interactive "${args[@]}" "${common_args[@]}"
     fi
 
-    if [[ "$INPUT_PULL_SOURCES" = true ] || [ "$INPUT_PULL_TRANSLATIONS" = true ]] ; then
+    if [[ "$INPUT_PULL_SOURCES" = true ]] || [[ "$INPUT_PULL_TRANSLATIONS" = true ]] ; then
         # Stashes all of the non needed changes (eg. sometines .tx/config is changed)
         git stash
         git checkout $CURRENT_BRANCH
