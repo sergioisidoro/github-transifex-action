@@ -22,7 +22,7 @@ jobs:
       - name: "Build Docker image"
         run: $(which docker) build --tag ${DOCKER_IMAGE}:latest .
 
-      - name: "Run Docker image"
+      - name: "Run simple workflow"
         run: $(which docker) run
           --interactive --rm
           --env-file docker-test.env --env INPUT_TX_TOKEN=$TX_TOKEN
@@ -30,7 +30,7 @@ jobs:
           --volume ${GITHUB_WORKSPACE}:/app
           ${DOCKER_IMAGE}:latest
 
-      - name: "Run Docker image"
+      - name: "Run git workflow"
         run: $(which docker) run
           --interactive --rm
           --env-file git-flow-docker-test.env
