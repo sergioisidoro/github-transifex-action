@@ -95,7 +95,7 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
         git stash
         git checkout $CURRENT_BRANCH
         git checkout ${TRANSLATIONS_MERGE_BRANCH} -- $TRANSLATIONS_FOLDER
-        git add $(echo $TRANSLATIONS_FOLDER)
+        git add $(echo ${TRANSLATIONS_FOLDER})
         git diff --staged --quiet || git commit -m "Update translations from Transifex"
 
         if [[ "$SKIP_PUSH_COMMIT" = true ]] ; then
