@@ -1,4 +1,6 @@
-# github-transifex-action
+# Github Transifex Action 🌎💬⚙️
+
+**⚠️ New versions might have breaking changes. Please pin your git action version so that breaking changes do not break your workflow ([see bellow](https://github.com/sergioisidoro/github-transifex-action#docker-image))** 
 
 ## What does this action do?
 
