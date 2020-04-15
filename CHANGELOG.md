@@ -1,9 +1,14 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## v0.2.0
+* [Git workflow](https://github.com/sergioisidoro/github-transifex-action/blob/81fef75/README.md#git-workflow)
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+### BREAKING CHANGES
+* Replaces `env` parameter in action configuration with the keyword `with`
+
+### DEPRECATION WARNINGS
+* In future git workflow will be the default mode for the action! 
+* This will be made together with timestamp comparison with git commit timestamps - https://github.com/transifex/transifex-client/pull/290
+
 
 ## Unreleased
-
-For a full diff see [`34c52fe...master`](https://github.com/ergebnis/github-action-template/compare/34c52fe...master).
