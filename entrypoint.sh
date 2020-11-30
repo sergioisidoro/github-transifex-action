@@ -78,16 +78,13 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
     git diff --staged --quiet || git commit -m "Update translations" && git stash && git merge --no-edit $CURRENT_BRANCH
 
     # and let's push the merged version upstream
-    if [[ "$INPUT_PUSH_SOURCES" = true ]] && [[ "$INPUT_PUSH_TRANSLATIONS" = true ]] ; then
-        tx push -s -t --no-interactive "${common_args[@]}"
-    else
-        if [[ "$INPUT_PUSH_SOURCES" = true ]] ; then
-            tx push -s --no-interactive "${common_args[@]}"
-        fi
 
-        if [[ "$INPUT_PUSH_TRANSLATIONS" = true ]] ; then
-            tx push -t --no-interactive "${common_args[@]}"
-        fi
+    if [[ "$INPUT_PUSH_SOURCES" = true ]] ; then
+        tx push -s --no-interactive "${common_args[@]}"
+    fi
+
+    if [[ "$INPUT_PUSH_TRANSLATIONS" = true ]] ; then
+        tx push -t --no-interactive "${common_args[@]}"
     fi
 
     if [[ "$INPUT_PULL_SOURCES" = true ]] || [[ "$INPUT_PULL_TRANSLATIONS" = true ]] ; then
