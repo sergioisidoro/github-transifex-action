@@ -24,11 +24,11 @@ inputs:
     default: 'false'
     required: false
   pull_sources:
-    description: 'Pulls source locales to Transifex'
+    description: 'Pulls source locales from Transifex'
     required: false
     default: 'true'
   pull_translations:
-    description: 'Pulls Translations to Transifex'
+    description: 'Pulls Translations from Transifex'
     default: 'false'
     required: false
   minimum_perc:

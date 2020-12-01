@@ -1,12 +1,12 @@
 # Github Transifex Action 🌎💬⚙️
 
-**⚠️ New versions might have breaking changes.** 
+**⚠️ New versions might have breaking changes.**
 
-Please pin your git action version instead of using `latest`, so that breaking changes do not break your workflow ([see bellow](https://github.com/sergioisidoro/github-transifex-action#docker-image)) You can also use the version `edge` for the current unreleased version (master branch) of this action** 
+Please pin your git action version instead of using `latest`, so that breaking changes do not break your workflow ([see bellow](https://github.com/sergioisidoro/github-transifex-action#docker-image)) You can also use the version `edge` for the current unreleased version (master branch) of this action**
 
 ## What does this action do?
 
-- For now it just pushes the source strings to Transifex, as long as you configure the `TX_TOKEN` to the enviroment of the job.
+- For now it just pushes the source strings to Transifex, as long as you configure the `TX_TOKEN` to the environment of the job.
 
 ## Usage
 
@@ -59,7 +59,8 @@ variable to false, because it is defined in the defaults
 
 ### Git workflow
 Because you might have multiple branches ongoing, and you might not want to override what the other branch has
-pushed to transifex, Git workflow offers a solution for handling the diff of transifex remote and the current branch with git.
+pushed to transifex, Git workflow offers a solution for handling the diff of transifex remote and the current branch with git. By default it
+will only pull the source and not the translated strings.
 
 It will take whatever is in transifex remote into a separate branch, merge your current branch into that
 branch (and resolving the diff), and then pushing things back to transifex. That way you have what's in transifex +
@@ -73,6 +74,8 @@ all the changes you've made in the current branch. Of course if there are merge 
             translations_folder: config/locale
             push_translations: true
             push_sources: true
+            pull_sources: true
+            pull_translations: false
             ...
             minimum_perc: 0
             disable_override: false
