@@ -75,7 +75,7 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
         # Unfortunately we need to use force because transifex thinks the checked out
         # files are newer than in Transifex, so they get ignored. See issue:
         # https://github.com/transifex/transifex-client/issues/22
-        tx pull -a -s --no-interactive --force "${common_args[@]}" "${args[@]}"
+        tx pull --no-interactive --force "${common_args[@]}" "${args[@]}"
     else
         echo "WARNING - NOT PULLING ANY STRINGS FROM TRANSIFEX - PUSHING WILL RESULT IN OVERRIDING THE STRINGS IN TRANSIFEX"
     fi
