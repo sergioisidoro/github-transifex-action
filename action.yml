@@ -45,7 +45,7 @@ inputs:
     required: false
   git_flow:
     description: 'Should use Git flow?'
-    default: 'false'
+    default: 'true'
     required: false
   current_branch:
     description: 'The current branch that is under work. Defaults to GITHUB_HEAD_REF'
