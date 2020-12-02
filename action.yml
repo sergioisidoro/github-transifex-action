@@ -24,11 +24,15 @@ inputs:
     default: 'false'
     required: false
   pull_sources:
-    description: 'Pulls source locales to Transifex'
+    description: 'Pulls sources from Transifex'
     required: false
     default: 'true'
   pull_translations:
-    description: 'Pulls Translations to Transifex'
+    description: 'Pulls Translations from Transifex'
+    default: 'true'
+    required: false
+  commit_to_pr:
+    description: 'Commits the results of the merge / pulls to the PR'
     default: 'false'
     required: false
   minimum_perc:
@@ -65,8 +69,9 @@ inputs:
     description: 'The email of the author of commit'
     required: false
   skip_push_commit:
-    description: 'Does not push anything back to git remote'
+    description: 'Does not push anything back to git remote (used for testing)'
     required: false
+    default: 'false'
   parallel:
     description: 'Pushes or pulls things from transifex in parallel'
     required: false
