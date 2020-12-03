@@ -47,6 +47,10 @@ inputs:
     description: 'Should use Git flow?'
     default: 'true'
     required: false
+  git_unshallow:
+    description: 'Unshallow git (required in git workflow if the git clone action only does shallow clone)'
+    default: 'true'
+    required: false
   current_branch:
     description: 'The current branch that is under work. Defaults to GITHUB_HEAD_REF'
     required: false
