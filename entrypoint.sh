@@ -89,7 +89,7 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
     git diff --staged
 
     # Stashes all of the non needed changes (eg. sometines .tx/config is changed)
-    git diff --staged --quiet || git commit -m "Update translations" && git stash && git merge --no-edit $CURRENT_BRANCH
+    git diff --staged --quiet || git commit -m "Update translations" && git stash && git merge --no-edit origin/$CURRENT_BRANCH
 
     # and let's push the merged version upstream
 
