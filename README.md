@@ -1,8 +1,8 @@
 # Github Transifex Action 🌎💬⚙️
 
-**⚠️ New versions might have breaking changes.** 
+**⚠️ New versions might have breaking changes.**
 
-Please pin your git action version instead of using `latest`, so that breaking changes do not break your workflow ([see bellow](https://github.com/sergioisidoro/github-transifex-action#docker-image)) You can also use the version `edge` for the current unreleased version (master branch) of this action** 
+Please pin your git action version instead of using `latest`, so that breaking changes do not break your workflow ([see bellow](https://github.com/sergioisidoro/github-transifex-action#docker-image)) You can also use the version `edge` for the current unreleased version (master branch) of this action**
 
 ## What does this action do?
 
@@ -40,45 +40,80 @@ jobs:
 
 
 ## What commands are supported?
+Because you might have multiple branches ongoing, and you might not want to override what the other branch have
+pushed to transifex, this action offers a solution for handling the diff of transifex remote and the current branch with git.
 
-### Simple workflow ( ⚠️ replaces whatever is in Tx / locally with whatever is being pushed / pulled)
-**The default action is push sources**. But you can set different actions through env variables.
-For example, just define these variables in ENV. If you don't want to push sources, you need to set the
-variable to false, because it is defined in the defaults
-```
-      - name: "Run action"
-        with: # Or as an environment variable
-            tx_token: ${{ secrets.TX_TOKEN }}
-            push_sources: true
-            push_translations: true
-            pull_sources: false
-            pull_translations: true
-            minimum_perc: 0
-            disable_override: false
-```
+1. It will pull things from transifex remote into a separate branch,
+2. merge your current branch into the branch with the transifex content (and resolving the diff)
+4. Push things back to transifex
+5. Commit the state into your PR
 
-### Git workflow
-Because you might have multiple branches ongoing, and you might not want to override what the other branch has
-pushed to transifex, Git workflow offers a solution for handling the diff of transifex remote and the current branch with git.
+That way you have what's in transifex + all the changes you've made in the current branch.
+Of course if there are merge conflicts you will need to take manual action.
 
-It will take whatever is in transifex remote into a separate branch, merge your current branch into that
-branch (and resolving the diff), and then pushing things back to transifex. That way you have what's in transifex +
-all the changes you've made in the current branch. Of course if there are merge conflicts you will need to take manual action.
+## Important note
+
+⚠️ If you have `pull_sources: false` or `pull_translations: false` this action will not pull things from transifex. This means that if you use any of the push commands, that action will override transifex content without using the merging functionality of this action. These inputs have default true to prevent accidental overrides.
+
+## Use cases
+Here are the most common use cases for this action
+
+NOTE: `github_token` and `translations_folder` are required if you use `git_flow`
+### Push to transifex without messing with strings pushed from other PRs:
 ```
-      - name: "Run action"
+      - name: "Merge and push to transifex"
         with: # Or as an environment variable
             tx_token: ${{ secrets.TX_TOKEN }}
             git_flow: true
             github_token: ${{ secrets.GITHUB_TOKEN }}
             translations_folder: config/locale
+            pull_translations: true
+            pull_sources: true
             push_translations: true
             push_sources: true
-            ...
-            minimum_perc: 0
+```
+### Pull the entire current state from Transifex and commit to the PR:
+```
+      - name: "Pull from transifex and commit to the PR"
+        with: # Or as an environment variable
+            tx_token: ${{ secrets.TX_TOKEN }}
+            git_flow: true
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            translations_folder: config/locale
+            pull_translations: true
+            pull_sources: true
+            commit_to_pr: true
+```
+### Reset Transifex with what you currently have in your branch (DANGER)
+```
+      - name: "Reset Transifex with current state"
+        with: # Or as an environment variable
+            tx_token: ${{ secrets.TX_TOKEN }}
+            git_flow: true
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            translations_folder: config/locale
+            pull_translations: false
+            pull_sources: false
+            push_translations: true
+            push_sources: true
+```
+
+### Simple workflow ( DEPRECATED ! )
+DEPRECATED -  This action does not require a git token, or a translation folder input. But it can only push sources and translations without merging the transifex state. It does not support commit to the PR, and push command will override anything in Transifex with the current state of the pull request. 
+
+Support for simple workflow will be removed on the next releases.
+```
+      - name: "Run action"
+        with: # Or as an environment variable
+            git_flow: false
+            tx_token: ${{ secrets.TX_TOKEN }}
+            push_sources: true
+            push_translations: true
             disable_override: false
 ```
-NOTE: `github_token` and `translations_folder` are required if you use `git_flow`
 
+### Supported inputs and options.
+See [the action input description](https://github.com/sergioisidoro/github-transifex-action/blob/master/action.yml#L17) for a full understanding of what the action supports
 ### Docker image
 
 As Docker images are automatically built and pushed on a merge to `master` or when a new tag is created in this repository, the recommended way to use this GitHub action is to reference the pre-built Docker image directly, as seen above.
@@ -138,3 +173,7 @@ Please have a look at [`CODE_OF_CONDUCT.md`](.github/CODE_OF_CONDUCT.md).
 ## License
 
 This package is licensed using the MIT License.
+
+## Authors and Contributors
+- @smaisidoro
+- @rGaillard

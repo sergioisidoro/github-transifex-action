@@ -41,6 +41,13 @@ if [[ "$INPUT_DISABLE_OVERRIDE" = true ]] ; then
     args+=( "--disable-overwrite" )
 fi
 
+if [[ "$INPUT_PULL_SOURCES" = true ]] ; then
+    args+=( "-s" )
+fi
+
+if [[ "$INPUT_PULL_TRANSLATIONS" = true ]] ; then
+    args+=( "-a" )
+fi
 
 if [[ "$INPUT_GIT_FLOW" = true ]] ; then
     echo "USING GIT MERGE FLOW"
@@ -55,19 +62,26 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
     git config --global user.name "${COMMITTER_NAME}"
     remote_repo="https://${GITHUB_ACTOR}:${INPUT_GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 
-    # Git checkout action does a shallow clone. That prevents us to
-    # access common history of branches.
-    git fetch --unshallow
+
+    if [[ "$INPUT_GIT_UNSHALLOW" = true ]] ; then
+        # Git checkout action does a shallow clone. That prevents us to
+        # access common history of branches.
+        git fetch --unshallow
+    fi
 
     git checkout ${MASTER_BRANCH}
     TRANSLATIONS_MERGE_BRANCH="${MASTER_BRANCH}-translations-$(date +%s)"
     git checkout -b ${TRANSLATIONS_MERGE_BRANCH}
 
-    echo "Pulling most up to date sources and translations"
-    # Unfortunately we need to use force because transifex thinks the checked out
-    # files are newer than in Transifex, so they get ignored. See issue:
-    # https://github.com/transifex/transifex-client/issues/22
-    tx pull -a -s --no-interactive --force "${common_args[@]}" "${args[@]}"
+    if [[ "$INPUT_PULL_SOURCES" = true ]] || [[ "$INPUT_PULL_TRANSLATIONS" = true ]] ; then
+        echo "Pulling most up to date sources and translations"
+        # Unfortunately we need to use force because transifex thinks the checked out
+        # files are newer than in Transifex, so they get ignored. See issue:
+        # https://github.com/transifex/transifex-client/issues/22
+        tx pull --no-interactive --force "${common_args[@]}" "${args[@]}"
+    else
+        echo "WARNING - NOT PULLING ANY STRINGS FROM TRANSIFEX - PUSHING WILL RESULT IN OVERRIDING THE STRINGS IN TRANSIFEX"
+    fi
 
     # Commits latest transifex tranlsations to our local branch
     git add $(echo ${TRANSLATIONS_FOLDER})
@@ -75,7 +89,7 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
     git diff --staged
 
     # Stashes all of the non needed changes (eg. sometines .tx/config is changed)
-    git diff --staged --quiet || git commit -m "Update translations" && git stash && git merge --no-edit $CURRENT_BRANCH
+    git diff --staged --quiet || git commit -m "Update translations" && git stash && git merge --no-edit origin/$CURRENT_BRANCH
 
     # and let's push the merged version upstream
 
@@ -87,7 +101,7 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
         tx push -t --no-interactive "${common_args[@]}"
     fi
 
-    if [[ "$INPUT_PULL_SOURCES" = true ]] || [[ "$INPUT_PULL_TRANSLATIONS" = true ]] ; then
+    if [[ "$INPUT_COMMIT_TO_PR" = true ]] ; then
         # Stashes all of the non needed changes (eg. sometines .tx/config is changed)
         git stash
         git checkout $CURRENT_BRANCH
