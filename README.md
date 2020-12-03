@@ -35,7 +35,7 @@ jobs:
       - name: "Run action"
         with:
             TX_TOKEN: ${{ secrets.TX_TOKEN }}
-        uses: docker://sergioisidoro/github-transifex-action:latest
+        uses: docker://sergioisidoro/github-transifex-action:v0.2.0
 ```
 
 
