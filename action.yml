@@ -15,6 +15,9 @@ runs:
   image: 'docker://sergioisidoro/github-transifex-action'
 
 inputs:
+  tx_token:
+    description: 'Transifex Token'
+    required: true
   push_sources:
     description: 'Pushes source locales to Transifex'
     required: false
