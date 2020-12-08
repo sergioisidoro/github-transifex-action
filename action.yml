@@ -83,3 +83,7 @@ inputs:
     description: 'Pushes or pulls things from transifex in parallel'
     required: false
     default: 'false'
+  use_git_timestamps:
+    description: 'Use git timestamps to only pull newest resources'
+    required: false
+    default: 'false'

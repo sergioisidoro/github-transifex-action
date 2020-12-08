@@ -26,7 +26,7 @@ export TX_TOKEN=${INPUT_TX_TOKEN:-$TX_TOKEN}
 # 4 - Use git merge with fast-forward only so we merge the differences
 # 5 - Push the merge result to transifex
 
-args=()
+pull_args=()
 common_args=()
 
 if [[ "$INPUT_PARALLEL" = true ]] ; then
@@ -34,20 +34,27 @@ if [[ "$INPUT_PARALLEL" = true ]] ; then
 fi
 
 if [[ $INPUT_MINIMUM_PERC -ne 0 ]] ; then
-    args+=( "--minimum-perc=$INPUT_MINIMUM_PERC" )
+    pull_args+=( "--minimum-perc=$INPUT_MINIMUM_PERC" )
 fi
 
 if [[ "$INPUT_DISABLE_OVERRIDE" = true ]] ; then
-    args+=( "--disable-overwrite" )
+    pull_args+=( "--disable-overwrite" )
 fi
 
 if [[ "$INPUT_PULL_SOURCES" = true ]] ; then
-    args+=( "-s" )
+    pull_args+=( "-s" )
 fi
 
 if [[ "$INPUT_PULL_TRANSLATIONS" = true ]] ; then
-    args+=( "-a" )
+    pull_args+=( "-a" )
 fi
+
+if [[ "$INPUT_USE_GIT_TIMESTAMPS" = true ]] ; then
+    pull_args+=( "--use-git-timestamps" )
+else
+    pull_args+=( "--force" )
+fi
+
 
 if [[ "$INPUT_GIT_FLOW" = true ]] ; then
     echo "USING GIT MERGE FLOW"
@@ -75,10 +82,7 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
 
     if [[ "$INPUT_PULL_SOURCES" = true ]] || [[ "$INPUT_PULL_TRANSLATIONS" = true ]] ; then
         echo "Pulling most up to date sources and translations"
-        # Unfortunately we need to use force because transifex thinks the checked out
-        # files are newer than in Transifex, so they get ignored. See issue:
-        # https://github.com/transifex/transifex-client/issues/22
-        tx pull --no-interactive --force "${common_args[@]}" "${args[@]}"
+        tx pull --no-interactive "${common_args[@]}" "${pull_args[@]}"
     else
         echo "WARNING - NOT PULLING ANY STRINGS FROM TRANSIFEX - PUSHING WILL RESULT IN OVERRIDING THE STRINGS IN TRANSIFEX"
     fi
@@ -89,6 +93,7 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
     git diff --staged
 
     # Stashes all of the non needed changes (eg. sometines .tx/config is changed)
+    echo "MERGING TRANSIFEX STATE WITH CURRENT COPY!"
     git diff --staged --quiet || git commit -m "Update translations" && git stash && git merge --no-edit origin/$CURRENT_BRANCH
 
     # and let's push the merged version upstream
@@ -102,6 +107,7 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
     fi
 
     if [[ "$INPUT_COMMIT_TO_PR" = true ]] ; then
+        echo "COMMITTING TO PR"
         # Stashes all of the non needed changes (eg. sometines .tx/config is changed)
         git stash
         git checkout $CURRENT_BRANCH
@@ -117,14 +123,10 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
     fi
 else
     echo "USING OVERRIDE FLOW"
-    if [[ "$INPUT_PULL_SOURCES" = true ]] ; then
-        echo "PULLING SOURCES"
-        tx pull -s --force --no-interactive "${common_args[@]}"
-    fi
 
-    if [[ "$INPUT_PULL_TRANSLATIONS" = true ]] ; then
-        echo "PULLING TRANSLATIONS (with args: $args)"
-        tx pull -a --force --no-interactive "${args[@]}" "${common_args[@]}"
+    if [[ "$INPUT_PULL_SOURCES" = true ]] || [[ "$INPUT_PULL_TRANSLATIONS" = true ]] ; then
+        echo "PULLING TRANSLATIONS (with pull_args: $pull_args)"
+        tx pull -a --no-interactive "${pull_args[@]}" "${common_args[@]}"
     fi
 
     if [[ "$INPUT_PUSH_SOURCES" = true ]] ; then
