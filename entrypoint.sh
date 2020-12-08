@@ -63,7 +63,7 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
     remote_repo="https://${GITHUB_ACTOR}:${INPUT_GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 
 
-    if [[ "$INPUT_GIT_UNSHALLOW" = true ]] ; then
+    if [[ "$INPUT_GIT_UNSHALLOW" != false ]] ; then
         # Git checkout action does a shallow clone. That prevents us to
         # access common history of branches.
         git fetch --unshallow
