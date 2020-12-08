@@ -69,7 +69,7 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
         git fetch --unshallow
     fi
 
-    git checkout ${MASTER_BRANCH}
+    git checkout origin/${MASTER_BRANCH}
     TRANSLATIONS_MERGE_BRANCH="${MASTER_BRANCH}-translations-$(date +%s)"
     git checkout -b ${TRANSLATIONS_MERGE_BRANCH}
 
