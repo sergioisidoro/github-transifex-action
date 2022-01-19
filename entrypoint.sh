@@ -73,7 +73,10 @@ if [[ "$INPUT_GIT_FLOW" = true ]] ; then
     TRANSLATIONS_MERGE_BRANCH="${MASTER_BRANCH}-translations-$(date +%s)"
     git checkout -b ${TRANSLATIONS_MERGE_BRANCH}
 
-    if [[ "$INPUT_PULL_SOURCES" = true ]] || [[ "$INPUT_PULL_TRANSLATIONS" = true ]] ; then
+    if ( ([[ "$INPUT_PULL_SOURCES" = true ]] || [[ "$INPUT_PULL_TRANSLATIONS" = true ]]) && [[ "$INPUT_SPECIFY_RESOURCE" = true ]] ) ; then
+        echo "Pulling most up to date sources and translations with the specified resource: $INPUT_PROJECT.$INPUT_RESOURCE"
+        tx pull --no-interactive --force "${common_args[@]}" "${args[@]}" -r "$INPUT_PROJECT"."$INPUT_RESOURCE"
+    elif [[ "$INPUT_PULL_SOURCES" = true ]] || [[ "$INPUT_PULL_TRANSLATIONS" = true ]] ; then
         echo "Pulling most up to date sources and translations"
         # Unfortunately we need to use force because transifex thinks the checked out
         # files are newer than in Transifex, so they get ignored. See issue:
