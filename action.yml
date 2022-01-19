@@ -83,3 +83,15 @@ inputs:
     description: 'Pushes or pulls things from transifex in parallel'
     required: false
     default: 'false'
+  specify_resource:
+    description: 'Is resource specified?'
+    required: false
+    default: 'false'
+  resource:
+    description: 'The resource in Transifex'
+    required: false
+    type: string
+  project:
+    description: 'The project in transifex'
+    required: false
+    type: string
