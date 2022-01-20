@@ -1,6 +1,6 @@
 .PHONY: docker help it
 
-DOCKER_IMAGE:=netmedi/github-transifex-action
+DOCKER_IMAGE:=kape/github-transifex-action
 
 it: docker ## Runs the docker target
 

@@ -12,7 +12,7 @@ name: 'github-transifex-actions'
 
 runs:
   using: 'docker'
-  image: 'docker://netmedi/github-transifex-action'
+  image: 'docker://kape/github-transifex-action'
 
 inputs:
   tx_token:

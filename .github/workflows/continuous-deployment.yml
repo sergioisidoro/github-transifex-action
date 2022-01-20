@@ -1,56 +1,45 @@
-# https://help.github.com/en/categories/automating-your-workflow-with-github-actions
-
+name: Publish Docker image
 on:
   push:
     branches:
       - master
     tags:
       - "**"
-
-name: "Continuous Deployment"
-
 jobs:
-  build:
-    name: "Build and deploy"
-
+  npm_test:
+    name: Run unit tests
     runs-on: ubuntu-latest
-
-    env:
-      DOCKER_IMAGE: sergioisidoro/github-transifex-action
-
+    permissions:
+      packages: write
+      contents: read
     steps:
-      - name: "Checkout"
-        uses: actions/checkout@v1
-
-      - name: "Build Docker image"
-        run: $(which docker) build --tag ${DOCKER_IMAGE}:latest .
-
-      - name: "Tag edge image"
-        if: "'refs/heads/master' == github.ref"
-        run: $(which docker) tag ${DOCKER_IMAGE} ${DOCKER_IMAGE}:edge
-
-      - name: "Docker Login"
-        if: "'refs/heads/master' == github.ref || startsWith(github.ref, 'refs/tags/')"
-        run: echo ${{ secrets.DOCKER_PASSWORD }} | $(which docker) login --password-stdin --username ${{ secrets.DOCKER_USERNAME }}
-
-      - name: "Push Docker image (edge)"
-        if: "'refs/heads/master' == github.ref"
-        run: $(which docker) push ${DOCKER_IMAGE}:edge
-
-      # Only push latest on new release
-
-      - name: "Push Docker image (latest)"
-        if: "startsWith(github.ref, 'refs/tags/')"
-        run: $(which docker) push ${DOCKER_IMAGE}:latest
-
-      - name: "Tag Docker image (versioned)"
-        if: "startsWith(github.ref, 'refs/tags/')"
-        run: $(which docker) tag ${DOCKER_IMAGE} ${DOCKER_IMAGE}:$(bash ./bin/tag-name.sh ${GITHUB_REF})
-
-      - name: "Push Docker image (versioned)"
-        if: "startsWith(github.ref, 'refs/tags/')"
-        run: $(which docker) push ${DOCKER_IMAGE}:$(bash ./bin/tag-name.sh ${GITHUB_REF})
-
-      - name: "Docker Logout"
-        if: "'refs/heads/master' == github.ref || startsWith(github.ref, 'refs/tags/')"
-        run: $(which docker) logout
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+      - run: npm install && npm test
+  push_to_registry:
+    name: Push Docker image to Docker hub
+    needs: npm_test
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: What
+        run: echo "RELEASE_TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: Build container image
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: |
+            kape/github-transifex-action:${{ env.RELEASE_TAG }}
+            kape/github-transifex-action:latest

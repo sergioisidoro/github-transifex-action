@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DOCKER_IMAGE: sergioisidoro/github-transifex-action
+      DOCKER_IMAGE: kape/github-transifex-action
       TX_TOKEN: ${{ secrets.TX_TOKEN }}
 
     steps:
